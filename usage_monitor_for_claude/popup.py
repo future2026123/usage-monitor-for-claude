@@ -177,6 +177,11 @@ class _PopupApi:
     def open_url(self) -> None:
         webbrowser.open(CHANGELOG_URL)
 
+    def toggle_pin(self) -> bool:
+        """Toggle pin mode and return the new state."""
+        self._popup._pinned = not self._popup._pinned
+        return self._popup._pinned
+
     def report_height(self, height: int) -> None:
         """Called by JS ResizeObserver when content height changes."""
         if height and height != self._popup._last_height:
@@ -211,6 +216,9 @@ class UsagePopup:
         self._running = True
         self._closed = threading.Event()
         self._popup_hwnd = 0
+        # When pinned, click-outside / focus-change / Escape dismiss is suppressed,
+        # turning the popup into a persistent always-on-top window.
+        self._pinned = False
         initial_height = 400
         self._last_height = initial_height
         snap = app.cache.snapshot
@@ -279,6 +287,10 @@ class UsagePopup:
         WM_QUIT = 0x0012
 
         def _post_quit() -> None:
+            # Pinned popup ignores click-outside / focus-change / Escape;
+            # only the close button (handled separately) can dismiss it.
+            if self._pinned:
+                return
             if self._shown:
                 ctypes.windll.user32.PostThreadMessageW(this_thread, WM_QUIT, 0, 0)
 

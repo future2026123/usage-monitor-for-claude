@@ -30,7 +30,13 @@ header {
         color: var(--fg-heading);
     }
 
-    & > button {
+    & > .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    & button {
         font-size: 18px;
         color: var(--fg-dim);
         cursor: pointer;
@@ -41,6 +47,18 @@ header {
         font-family: inherit;
 
         &:hover { color: var(--fg-heading); }
+    }
+
+    & button#pinBtn {
+        font-size: 14px;
+        opacity: 0.55;
+        filter: grayscale(1);
+
+        &.active {
+            opacity: 1;
+            filter: none;
+            color: var(--bar-marker);
+        }
     }
 }
 

@@ -31,6 +31,13 @@ function init(config) {
     changelogLink.addEventListener('click', () => pywebview.api.open_url());
     document.getElementById('closeBtn').addEventListener('click', () => pywebview.api.close());
 
+    const pinBtn = document.getElementById('pinBtn');
+    pinBtn.addEventListener('click', async () => {
+        const pinned = await pywebview.api.toggle_pin();
+        pinBtn.classList.toggle('active', pinned);
+        pinBtn.setAttribute('aria-pressed', pinned ? 'true' : 'false');
+    });
+
     document.getElementById('appVersion').textContent = config.app_version;
 
     els = {
