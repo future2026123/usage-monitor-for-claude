@@ -230,7 +230,7 @@ class UsagePopup:
             '', url=str(_POPUP_DIR / 'popup.html'),
             width=self.WIDTH, height=initial_height,
             resizable=False, frameless=True, shadow=False,
-            easy_drag=False,
+            easy_drag=True,
             on_top=True, hidden=True,
             background_color=BG,
             js_api=api,
